@@ -34,8 +34,12 @@
     },
     methods: {
       addTask() {
-        this.resource.saveTask({ name: this.newTask, hasLine: false });
-        this.newTask = ""
+        this.resource.saveTask({ name: this.newTask, hasLine: false })
+        .then( () => {
+          this.fetchData();
+          done();
+        });
+        this.newTask = "";
       },
       fetchData() {
         //get Data
@@ -50,11 +54,6 @@
               }
               this.tasks = resultArray;
             });
-      }
-    },
-    watch: {
-      tasks() {
-        this.fetchData();
       }
     },
     created() {
