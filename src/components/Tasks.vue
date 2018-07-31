@@ -37,7 +37,7 @@
         this.resource.saveTask({ name: this.newTask, hasLine: false });
         this.newTask = ""
       },
-      getData() {
+      fetchData() {
         //get Data
         this.resource.getData({node: this.node})
           .then(response => {
@@ -54,7 +54,7 @@
     },
     watch: {
       tasks() {
-        this.getData();
+        this.fetchData();
       }
     },
     created() {
@@ -64,7 +64,7 @@
       }
       this.resource = this.$resource('{node}.json', {}, customActions);
 
-      this.getData();
+      this.fetchData();
     },
   }
 </script>
