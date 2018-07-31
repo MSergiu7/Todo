@@ -37,6 +37,25 @@
         this.resource.saveTask({ name: this.newTask, hasLine: false });
         this.newTask = ""
       },
+      getData() {
+        //get Data
+        this.resource.getData({node: this.node})
+          .then(response => {
+              return response.json();
+            })
+            .then(data => {
+              const resultArray = [];
+              for (let key in data) {
+                resultArray.push(data[key]);
+              }
+              this.tasks = resultArray;
+            });
+      }
+    },
+    watch: {
+      tasks() {
+        this.getData();
+      }
     },
     created() {
       const customActions = {
@@ -45,34 +64,8 @@
       }
       this.resource = this.$resource('{node}.json', {}, customActions);
 
-
-      //get Data
-      this.resource.getData({node: this.node})
-        .then(response => {
-            return response.json();
-          })
-          .then(data => {
-            const resultArray = [];
-            for (let key in data) {
-              resultArray.push(data[key]);
-            }
-            this.tasks = resultArray;
-          });
+      this.getData();
     },
-    updated() {
-      //get Data
-      this.resource.getData({node: this.node})
-        .then(response => {
-            return response.json();
-          })
-          .then(data => {
-            const resultArray = [];
-            for (let key in data) {
-              resultArray.push(data[key]);
-            }
-            this.tasks = resultArray;
-          });
-    }
   }
 </script>
 
