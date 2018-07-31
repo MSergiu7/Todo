@@ -13,15 +13,11 @@
     methods: {
       taskSelected() {
         taskBus.$emit('taskSelected', this.task)
-      },
-      // addRemoveLine() {
-      //
-      //   taskBus.$emit('addRemoveLine', this.task.hasLine);
-      // }
+      }
     },
     created() {
-      taskBus.$on('taskEdited', (task) => {
-        this.task = task;
+      taskBus.$on('taskEdited', (name) => {
+        this.task.name = name;
       })
     }
   }

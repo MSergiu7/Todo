@@ -1,7 +1,7 @@
 <template>
   <div class="details" v-if="task">
     <h1 class="list-title">Detalii:</h1>
-    <input type="text" v-model="task.name">
+    <input type="text" v-model="task.name" @keyup="changeTask">
     <p>{{ this.task.name }}</p>
   </div>
 </template>
@@ -14,9 +14,10 @@
         task: null
       }
     },
-    watch: {
-      task() {
-        taskBus.$emit('taskEdited', this.task)
+    methods: {
+      changeTask() {
+        console.log('ceva');
+        taskBus.$emit('taskEdited', this.task.name);
       }
     },
     created() {
