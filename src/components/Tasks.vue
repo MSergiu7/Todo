@@ -16,8 +16,10 @@
 </template>
 
 <script>
+  import { taskBus } from '../main.js'
   import Task from './Task.vue'
   import Details from './Details.vue'
+  import axios from 'axios'
 
   export default {
     data() {
@@ -34,36 +36,32 @@
     },
     methods: {
       addTask() {
-        this.resource.saveTask({ name: this.newTask, hasLine: false })
-        .then( () => {
-          this.fetchData();
-          done();
-        });
-        this.newTask = "";
+        axios.post('tasks.json', { name: this.newTask, hasLine: false })
+            .then( () => {
+              this.fetchData();
+            }).catch(error => console.log(error));
       },
       fetchData() {
-        //get Data
-        this.resource.getData({node: this.node})
-          .then(response => {
-              return response.json();
-            })
-            .then(data => {
-              const resultArray = [];
+        axios.get('/tasks.json')
+            .then(res => {
+              const data = res.data;
+              const tasks = []
               for (let key in data) {
-                resultArray.push(data[key]);
+                const task = data[key];
+                task.id = key;
+                tasks.push(task);
               }
-              this.tasks = resultArray;
-            });
+              this.tasks = tasks;
+            })
       }
     },
     created() {
-      const customActions = {
-        saveTask: {method: 'POST', url: 'tasks.json'},
-        getData: {method: 'GET'}
-      }
-      this.resource = this.$resource('{node}.json', {}, customActions);
-
       this.fetchData();
+
+      taskBus.$on('taskDeleted', (task) => {
+        let index = this.tasks.indexOf(task);
+        this.tasks.splice(index, 1)
+      })
     },
   }
 </script>
@@ -123,10 +121,13 @@
     background-color: #a2cc41;
   }
 
-  .remove {
-    margin-left: auto;
-    margin-right: 0;
+  .remove, .save {
     cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .save {
+    margin-right: 10px;
   }
 
   .task-checkbox {

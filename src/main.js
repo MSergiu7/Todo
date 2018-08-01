@@ -1,10 +1,8 @@
 import Vue from 'vue'
-import VueResource from 'vue-resource'
 import App from './App.vue'
+import axios from 'axios'
 
-Vue.use(VueResource);
-
-Vue.http.options.root = 'https://todo-9aebe.firebaseio.com/';
+axios.defaults.baseURL = 'https://todo-9aebe.firebaseio.com/';
 
 export const taskBus = new Vue();
 

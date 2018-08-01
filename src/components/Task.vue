@@ -1,8 +1,6 @@
 <template>
   <li class="success" @click="taskSelected">
     <p :class="{ cut: task.hasLine }">{{ task.name }}</p>
-    <!-- <p class="remove">X</p>
-    <input type="checkbox" class="task-checkbox"> -->
   </li>
 </template>
 
@@ -16,8 +14,10 @@
       }
     },
     created() {
-      taskBus.$on('taskEdited', (name) => {
-        this.task.name = name;
+      taskBus.$on('taskEdited', (id, name) => {
+        if (this.task.id == id) {
+          this.task.name = name;
+        }
       })
     }
   }

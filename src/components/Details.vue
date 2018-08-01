@@ -1,13 +1,22 @@
 <template>
   <div class="details" v-if="task">
     <h1 class="list-title">Detalii:</h1>
-    <input type="text" v-model="task.name" @keyup="changeTask">
-    <p>{{ this.task.name }}</p>
+    <div>
+      <p>Change task name:</p>
+      <input type="text" v-model="task.name" @keyup="changeTask">
+    </div>
+    <div>
+      <p>Completed</p>
+      <input type="checkbox" :class="{ cut: task.hasLine }" @click="task.hasLine = !task.hasLine" :checked="task.hasLine" >
+    </div>
+    <button class="save" @click="putTask">Save</button>
+    <button class="remove" @click="deleteTask">Delete this task</button>
   </div>
 </template>
 
 <script>
   import { taskBus } from '../main.js'
+  import axios from 'axios'
   export default {
     data() {
       return {
@@ -16,8 +25,17 @@
     },
     methods: {
       changeTask() {
-        console.log('ceva');
-        taskBus.$emit('taskEdited', this.task.name);
+        taskBus.$emit('taskEdited', this.task.id, this.task.name);
+      },
+      putTask() {
+        axios.put('tasks/' + this.task.id + '.json', {
+          name: this.task.name,
+          hasLine: this.task.hasLine
+        })
+      },
+      deleteTask() {
+        axios.delete('tasks/' + this.task.id + '.json');
+        taskBus.$emit('taskDeleted', this.task);
       }
     },
     created() {
