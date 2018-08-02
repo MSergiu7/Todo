@@ -6,9 +6,22 @@
       <button id="addTask" @click="addTask">Add</button>
     </div>
 
+    <div>
+      <h2>Filter the tasks:</h2>
+      <input type="radio" value="true" v-model="filter">
+      <label for="completed">Completed</label>
+      <input type="radio" value="false" v-model="filter">
+      <label for="uncompleted">Uncompleted</label>
+      <input type="radio" value="all" v-model="filter">
+      <label for="all">All</label>
+      <br>
+    </div>
+
     <p class="list-title">To do:</p>
     <ul class="list">
-      <component is="app-task" v-for="(task,index) in tasks" :key="index" :task="task"></component>
+      <component is="app-task" v-if="filter == 'all'" v-for="(task,index) in tasks" :key="index" :task="task"></component>
+      <component is="app-task" v-if="task.hasLine && filter == 'true'" v-for="(task,index) in tasks" :key="index" :task="task"></component>
+      <component is="app-task" v-if="!task.hasLine && filter == 'false'" v-for="(task,index) in tasks" :key="index" :task="task"></component>
     </ul>
     <component is="app-details"></component>
 
@@ -24,10 +37,17 @@
   export default {
     data() {
       return {
-        tasks: [
-        ],
+        filter: 'all',
+        tasks: [],
         newTask: '',
         node: 'tasks'
+      }
+    },
+    computed: {
+      filterBool() {
+        if (this.filter != 'all') {
+          this.filter = JSON.parse(this.filter);
+        }
       }
     },
     components: {
