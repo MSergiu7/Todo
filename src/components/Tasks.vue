@@ -8,20 +8,18 @@
 
     <div>
       <h2>Filter the tasks:</h2>
-      <input type="radio" value="true" v-model="filter">
+      <input type="radio" value="completed" v-model="option">
       <label for="completed">Completed</label>
-      <input type="radio" value="false" v-model="filter">
+      <input type="radio" value="uncompleted" v-model="option">
       <label for="uncompleted">Uncompleted</label>
-      <input type="radio" value="all" v-model="filter">
+      <input type="radio" value="all" v-model="option">
       <label for="all">All</label>
       <br>
     </div>
 
     <p class="list-title">To do:</p>
     <ul class="list">
-      <component is="app-task" v-if="filter == 'all'" v-for="(task,index) in tasks" :key="index" :task="task"></component>
-      <component is="app-task" v-if="task.hasLine && filter == 'true'" v-for="(task,index) in tasks" :key="index" :task="task"></component>
-      <component is="app-task" v-if="!task.hasLine && filter == 'false'" v-for="(task,index) in tasks" :key="index" :task="task"></component>
+      <component is="app-task" v-for="(task,index) in filterTasks" :key="index" :task="task"></component>
     </ul>
     <component is="app-details"></component>
 
@@ -37,17 +35,27 @@
   export default {
     data() {
       return {
-        filter: 'all',
+        option: 'all',
         tasks: [],
         newTask: '',
         node: 'tasks'
       }
     },
     computed: {
-      filterBool() {
-        if (this.filter != 'all') {
-          this.filter = JSON.parse(this.filter);
-        }
+      filterTasks() {
+        return this.tasks.filter((task) => {
+          if (this.option == 'completed') {
+            if (task.hasLine) {
+              return task;
+            }
+          } else if (this.option == 'uncompleted') {
+            if (task.hasLine == false) {
+              return task;
+            }
+          } else {
+            return task;
+          }
+        })
       }
     },
     components: {
