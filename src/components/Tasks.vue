@@ -21,7 +21,7 @@
     <ul class="list">
       <component is="app-task" v-for="(task,index) in filterTasks" :key="index" :task="task"></component>
     </ul>
-    <component is="app-details"></component>
+    <component is="app-details" @taskDeleted="deleteTask"></component>
 
   </div>
 </template>
@@ -65,8 +65,8 @@
     methods: {
       addTask() {
         axios.post('tasks.json', { name: this.newTask, hasLine: false })
-            .then( () => {
-              this.fetchData();
+            .then( (res) => {
+              this.tasks.push(JSON.parse(res.config.data));
             }).catch(error => console.log(error));
       },
       fetchData() {
@@ -81,15 +81,14 @@
               }
               this.tasks = tasks;
             })
+      },
+      deleteTask(task) {
+        let index = this.tasks.indexOf(task);
+        this.tasks.splice(index, 1)
       }
     },
     created() {
       this.fetchData();
-
-      taskBus.$on('taskDeleted', (task) => {
-        let index = this.tasks.indexOf(task);
-        this.tasks.splice(index, 1)
-      })
     },
   }
 </script>
