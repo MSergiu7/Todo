@@ -64,7 +64,7 @@
     },
     methods: {
       addTask() {
-        axios.post('tasks.json', { name: this.newTask, hasLine: false })
+        axios.post('tasks.json', { name: this.newTask, hasLine: false, isSelected: false })
             .then( (res) => {
               this.tasks.push(JSON.parse(res.config.data));
             }).catch(error => console.log(error));
@@ -89,6 +89,14 @@
     },
     created() {
       this.fetchData();
+
+      taskBus.$on('taskSelected', (task) => {
+        this.tasks.forEach(element => {
+          element.isSelected = false;
+        });
+        task.isSelected = true;
+      })
+
     },
   }
 </script>
@@ -146,6 +154,10 @@
 
   .success {
     background-color: #a2cc41;
+  }
+
+  .selected {
+    background-color: #6e8d25;
   }
 
   .remove, .save {

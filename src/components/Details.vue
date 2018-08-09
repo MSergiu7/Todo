@@ -30,12 +30,14 @@
       putTask() {
         axios.put('tasks/' + this.task.id + '.json', {
           name: this.task.name,
-          hasLine: this.task.hasLine
+          hasLine: this.task.hasLine,
+          isSelected: this.task.isSelected
         })
       },
       deleteTask() {
         axios.delete('tasks/' + this.task.id + '.json');
         this.$emit('taskDeleted', this.task);
+        this.task = null;
       }
     },
     created() {
