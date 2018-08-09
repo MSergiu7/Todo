@@ -36,6 +36,7 @@
       deleteTask() {
         axios.delete('tasks/' + this.task.id + '.json');
         this.$emit('taskDeleted', this.task);
+        this.task = null;
       }
     },
     created() {
