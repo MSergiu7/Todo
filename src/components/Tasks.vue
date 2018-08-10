@@ -174,7 +174,12 @@
     margin-right: 0;
   }
 
+  @keyframes cut {
+    from { text-decoration-color: transparent; }
+    to { text-decoration-color: auto; }
+  }
   .cut {
     text-decoration: line-through;
+    animation: cut 1s linear;
   }
 </style>
