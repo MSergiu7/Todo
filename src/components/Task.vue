@@ -16,9 +16,9 @@
       }
     },
     created() {
-      taskBus.$on('taskEdited', (id, name) => {
-        if (this.task.id == id) {
-          this.task.name = name;
+      taskBus.$on('taskEdited', (task) => {
+        if (this.task.id == task.id) {
+          this.task.name = task.name;
         }
       })
     }

@@ -25,7 +25,7 @@
     },
     methods: {
       changeTask() {
-        taskBus.$emit('taskEdited', this.task.id, this.task.name);
+        taskBus.$emit('taskEdited', this.task);
       },
       putTask() {
         axios.put('tasks/' + this.task.id + '.json', {
